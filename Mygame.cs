@@ -140,10 +140,13 @@ class Mygame
 	private void drawObjects(){
 		foreach (GameObject gameObject in gameobjects){
 			canvas.DrawImage(gameObject.Texture, gameObject.Position, paint);
-			canvas.DrawSurface(surface, new SKPoint(window.Size.X, 0));
-			canvas.DrawSurface(surface, new SKPoint(-window.Size.X, 0));
-			canvas.DrawSurface(surface, new SKPoint(0, -window.Size.Y));
-			canvas.DrawSurface(surface, new SKPoint(0, -window.Size.Y));
+			if (gameObject.Position.X + gameObject.Texture.Width > SizeX && gameObject.Position.Y + gameObject.Texture.Height > SizeY){
+				canvas.DrawImage(gameObject.Texture, gameObject.Position - new SKPoint(SizeX, SizeY), paint);
+			}else if(gameObject.Position.X + gameObject.Texture.Width > SizeX){
+				canvas.DrawImage(gameObject.Texture, gameObject.Position - new SKPoint(SizeX, 0), paint);
+			}else if(gameObject.Position.Y + gameObject.Texture.Height > SizeY){
+				canvas.DrawImage(gameObject.Texture, gameObject.Position - new SKPoint(0, SizeY), paint);
+			}
 		}
 	}
 
