@@ -61,12 +61,11 @@ class RectangleCollider : Collider{
 		bool yB = origin.Y + height >= collider.origin.Y && origin.Y + height <= collider.origin.Y + collider.height;
 		
 		//following Console lines are used for debugging
-		Console.WriteLine($"{xT}, {yT}, {xB}, {yB}");
+		//Console.WriteLine($"{xT}, {yT}, {xB}, {yB}");
 		if ((xT || xB) && (yT || yB)){
-				Console.WriteLine("Collision Rect zu Rect True");
 				return true;
 			}
-		Console.WriteLine("Collision Rect zu Rect False");
+		//Console.WriteLine("Collision Rect zu Rect False");
 		return false;
 	}
 

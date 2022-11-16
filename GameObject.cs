@@ -53,14 +53,14 @@ class GameObject{
 	public bool Move(double deltaTime, List<GameObject> gameObjects){
 		if (velX < 1 && velX > -1) velX = 0;
 		if (velY < 1 && velY > -1) velY = 0;
-		
+
 		positionX += (velX * ((float)deltaTime));
 		positionY -= (velY * ((float)deltaTime));
 
 		rectangleCollider.Origin = Position;
 
 		if (tag == "Player"){
-			if (checkCollision(gameObjects)); //[TODO]Trigger Game Over
+			if (checkCollision(gameObjects)) return true;
 		}
 
 		if (loosesVelocity){
@@ -99,7 +99,6 @@ class GameObject{
 	private bool checkCollision(List<GameObject> gameObjects){
 		foreach (GameObject gameObject in gameObjects){
 			if (gameObject == this) continue;
-			Console.WriteLine($"\n{gameObject.name}");
 			if (rectangleCollider.checkCollision(gameObject.rectangleCollider)) return true;
 			}
 			return false;
