@@ -33,6 +33,7 @@ class Mygame
 	}
 
 	private void OnUpdate(double arg1){
+		window.Title = "FPS " + (1/arg1).ToString("0.00");
 		if (pressedKeys.Contains(Key.A)){
 			gameobjects[0].AddVelocity(-50, 0);
 		}
@@ -147,6 +148,7 @@ class Mygame
 			}else if(gameObject.Position.Y + gameObject.Texture.Height > SizeY){
 				canvas.DrawImage(gameObject.Texture, gameObject.Position - new SKPoint(0, SizeY), paint);
 			}
+			
 		}
 	}
 

@@ -60,6 +60,8 @@ class GameObject{
 		positionX += (velX * ((float)deltaTime));
 		positionY -= (velY * ((float)deltaTime));
 
+		if (rectangleCollider != null) rectangleCollider.Origin = Position;
+		else circleCollider.Origin = Position;
 		var collidesWith = new List<GameObject>();
 		if (velY != 0 || velX != 0){
 			collidesWith = checkCollision(gameObjects);		
@@ -75,6 +77,7 @@ class GameObject{
 			else if(positionY > Mygame.SizeY) positionY = Mygame.SizeY - Mygame.SizeY;
 		}
 
+
 	}
 
 	public void AddVelocity(float x, float y){
@@ -86,35 +89,16 @@ class GameObject{
 		return t == tag;
 	}
 
+	public SKRect getColliderRect(){
+		return new SKRect(rectangleCollider.Origin.X, rectangleCollider.Origin.Y, rectangleCollider.Width + rectangleCollider.Origin.X, rectangleCollider.Height + rectangleCollider.Origin.Y);
+	}
+
 	private List<GameObject> checkCollision(List<GameObject> gameObjects){
 		List<GameObject> collidesWith = new List<GameObject>();
 		foreach (GameObject gameObject in gameObjects){
 			if (gameObject == this) continue;
 			Console.WriteLine($"\n{gameObject.name}");
-			if (this.circleCollider != null){
-				if(gameObject.circleCollider != null){
-					if(this.circleCollider.checkCollision(gameObject.circleCollider)){
-						collidesWith.Add(gameObject);
-					}
-				}else{
-					if(this.circleCollider.checkCollision(gameObject.rectangleCollider)){
-						collidesWith.Add(gameObject);
-					}
-				}
-			}else{
-				if(gameObject.circleCollider != null){
-					if(this.rectangleCollider.checkCollision(gameObject.circleCollider)){
-						collidesWith.Add(gameObject);
-					}
-				}else{
-					if(this.rectangleCollider.checkCollision(gameObject.rectangleCollider)){
-						collidesWith.Add(gameObject);
-					}
-				}
-			}
-			} 
-			foreach(var obj in collidesWith){
-				Console.Beep();
+			rectangleCollider.checkCollision(gameObject.rectangleCollider);
 			}
 			return collidesWith;
 	}

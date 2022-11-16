@@ -15,6 +15,7 @@ class CircleCollider : Collider{
 	}
 	SKPoint origin;
 	public SKPoint Origin{
+		set {origin = value;}
 		get{return origin;}
 	}
 	public CircleCollider(SKPoint o, float r){
@@ -41,11 +42,17 @@ class RectangleCollider : Collider{
 		get{return height;}
 	}
 	public SKPoint Origin{
+		set {origin = value;}
 		get{return origin;}
 	}
 	public bool checkCollision(CircleCollider collider){
 		
 		return false;
+	}
+
+	public void MoveOrigin(float x, float y){
+		origin.X += x;
+		origin.Y += y;
 	}
 	public bool checkCollision(RectangleCollider collider){
 		bool xT = origin.X >= collider.origin.X && origin.X <= collider.origin.X + collider.width;
