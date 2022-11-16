@@ -126,7 +126,7 @@ class Mygame
 
 	private void showGameOverRender(){
 		paint.TextSize = 50;
-		canvas.DrawText($"{score}", SizeX / 2 - paint.MeasureText($"{score}") / 2, 20, paint);
+		canvas.DrawText($"{score}", SizeX / 2 - paint.MeasureText($"{score}") / 2, 100, paint);
 
 		paint.TextSize = 36;
 		canvas.DrawText("Game Over", SizeX / 2 - paint.MeasureText("Game Over") / 2, SizeY / 2, paint);
