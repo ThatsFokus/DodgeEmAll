@@ -232,22 +232,18 @@ class Mygame
 		//create all variables
 		pressedKeys = new List<Key>();
 		gameobjects = new List<GameObject>();
-
-
-		var paint = new SKPaint();
-		paint.Color = SKColors.Gold;
-		var info = new SKImageInfo(50, 50);
-		var bmap = new SKBitmap(info);
-		var oCanvas = new SKCanvas(bmap);
-		oCanvas.DrawCircle(new SKPoint(0, 0), 150/2, paint);
-		player = new GameObject(window.Size.X/2, window.Size.Y/2, SKImage.FromBitmap(bmap), "Player", true, "Player");
+		//oCanvas.DrawCircle(new SKPoint(0, 0), 150/2, paint);
+		var data = SKData.Create(@"art/spaceshipsmall.png");
+		var playerimg = SKImage.FromEncodedData(data);
+		if(playerimg == null) {
+			window.Close();
+			return;
+		}
+		player = new GameObject(window.Size.X/2, window.Size.Y/2, playerimg, "Player", true, "Player");
 		gameobjects.Add(player);
 
-		info = new SKImageInfo(25, 25);
-		bmap = new SKBitmap(info);
-		oCanvas = new SKCanvas(bmap);
-		oCanvas.Clear(SKColors.OrangeRed);
-		meteorTexture = SKImage.FromBitmap(bmap);
+		data = SKData.Create(@"art/meteorsmall.png");
+		meteorTexture = SKImage.FromEncodedData(data);
 	}
 
 	private void createMeteor(){

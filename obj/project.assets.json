@@ -1384,11 +1384,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\PrivateProjects\\SkiaSharpPlayground\\SkiaSharpPlayground.csproj",
-      "projectName": "SkiaSharpPlayground",
-      "projectPath": "C:\\PrivateProjects\\SkiaSharpPlayground\\SkiaSharpPlayground.csproj",
+      "projectUniqueName": "C:\\PrivateProjects\\DodgeEmAll\\DodgeEmAll.csproj",
+      "projectName": "DodgeEmAll",
+      "projectPath": "C:\\PrivateProjects\\DodgeEmAll\\DodgeEmAll.csproj",
       "packagesPath": "C:\\Users\\samsung\\.nuget\\packages\\",
-      "outputPath": "C:\\PrivateProjects\\SkiaSharpPlayground\\obj\\",
+      "outputPath": "C:\\PrivateProjects\\DodgeEmAll\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\samsung\\AppData\\Roaming\\NuGet\\NuGet.Config"
