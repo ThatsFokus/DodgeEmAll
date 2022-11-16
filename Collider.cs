@@ -48,11 +48,14 @@ class RectangleCollider : Collider{
 		return false;
 	}
 	public bool checkCollision(RectangleCollider collider){
+		bool xT = origin.X >= collider.origin.X && origin.X <= collider.origin.X + collider.width;
+		bool yT = origin.Y >= collider.origin.Y && origin.Y <= collider.origin.Y + collider.height;
+		bool xB = origin.X + width >= collider.origin.X && origin.X + width <= collider.origin.X + collider.width;
+		bool yB = origin.Y + height >= collider.origin.Y && origin.Y + height <= collider.origin.Y + collider.height;
 		
-		if	(this.origin.X + this.width >= collider.origin.X && 
-			this.origin.X <= collider.width + collider.origin.X && 
-			this.origin.Y + this.height >= collider.origin.Y && 
-			this.origin.Y <= collider.height + collider.origin.Y){
+		//following Console lines are used for debugging
+		Console.WriteLine($"{xT}, {yT}, {xB}, {yB}");
+		if ((xT || xB) && (yT || yB)){
 				Console.WriteLine("Collision Rect zu Rect True");
 				return true;
 			}

@@ -33,13 +33,15 @@ class GameObject{
 		canvas.Flush();
 		texture = SKImage.FromBitmap(bmap);
 		tag = "";
+		this.name = "GameObject";
 	}
 
-	public GameObject(float posx, float posy,SKImage texture ,bool isCircle = false, string tag = ""){
+	public GameObject(float posx, float posy,SKImage texture, string name ,bool isCircle = false, string tag = ""){
 		positionX = posx;
 		positionY = posy;
 		velX = 0;
 		velY = 0;
+		this.name = name;
 		this.tag = tag;
 		this.texture = texture;
 		if (isCircle){
@@ -88,6 +90,7 @@ class GameObject{
 		List<GameObject> collidesWith = new List<GameObject>();
 		foreach (GameObject gameObject in gameObjects){
 			if (gameObject == this) continue;
+			Console.WriteLine($"\n{gameObject.name}");
 			if (this.circleCollider != null){
 				if(gameObject.circleCollider != null){
 					if(this.circleCollider.checkCollision(gameObject.circleCollider)){

@@ -167,7 +167,7 @@ class Mygame
 		var bmap = new SKBitmap(info);
 		var oCanvas = new SKCanvas(bmap);
 		oCanvas.DrawCircle(new SKPoint(0, 0), 150/2, paint);
-		player = new GameObject(window.Size.X/2, window.Size.Y/2, SKImage.FromBitmap(bmap), false, "Player");
+		player = new GameObject(window.Size.X/2, window.Size.Y/2, SKImage.FromBitmap(bmap), "Player", false, "Player");
 		gameobjects.Add(player);
 
 		paint.Color = SKColors.Silver;
@@ -175,6 +175,6 @@ class Mygame
 		bmap = new SKBitmap(info);
 		oCanvas = new SKCanvas(bmap);
 		oCanvas.DrawRect(0, 0, 150, 75, paint);
-		gameobjects.Add(new GameObject(0, 500, SKImage.FromBitmap(bmap)));
+		gameobjects.Add(new GameObject(0, 500, SKImage.FromBitmap(bmap), "Rectangle"));
 	}
 }
