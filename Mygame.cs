@@ -18,7 +18,8 @@ class Mygame
 	private List<Key> pressedKeys;
 	private List<GameObject> gameobjects;
 	private GameObject player;
-	public static GameObject cube;
+	private Random random = new Random(((int)DateTime.Now.Ticks));
+	private SKImage meteorTexture;
 	public Mygame(int width, int height, string title){
 		var options = WindowOptions.Default;
 		options.Title = title;
@@ -29,11 +30,9 @@ class Mygame
 		window.Update += OnUpdate;
 		window.Render += OnRender;
 		window.Load += OnLoad;
-		Console.Beep();
 	}
 
 	private void OnUpdate(double arg1){
-		window.Title = "FPS " + (1/arg1).ToString("0.00");
 		if (pressedKeys.Contains(Key.A)){
 			gameobjects[0].AddVelocity(-50, 0);
 		}
@@ -50,9 +49,16 @@ class Mygame
 			gameobjects[0].AddVelocity(0, -50);
 		}
 
-		foreach (GameObject gameObject in gameobjects){
-			gameObject.Move(arg1, gameobjects);
+		if(pressedKeys.Contains(Key.Space)){
+			createMeteor();
+			pressedKeys.Remove(Key.Space);
 		}
+		List<GameObject> toRemove = new List<GameObject>();
+		foreach (GameObject gameObject in gameobjects){
+			if (gameObject.Move(arg1, gameobjects))toRemove.Add(gameObject);
+		}
+
+		foreach (GameObject gameObject in toRemove) gameobjects.Remove(gameObject);
 
 	}
 
@@ -141,14 +147,15 @@ class Mygame
 	private void drawObjects(){
 		foreach (GameObject gameObject in gameobjects){
 			canvas.DrawImage(gameObject.Texture, gameObject.Position, paint);
-			if (gameObject.Position.X + gameObject.Texture.Width > SizeX && gameObject.Position.Y + gameObject.Texture.Height > SizeY){
-				canvas.DrawImage(gameObject.Texture, gameObject.Position - new SKPoint(SizeX, SizeY), paint);
-			}else if(gameObject.Position.X + gameObject.Texture.Width > SizeX){
-				canvas.DrawImage(gameObject.Texture, gameObject.Position - new SKPoint(SizeX, 0), paint);
-			}else if(gameObject.Position.Y + gameObject.Texture.Height > SizeY){
-				canvas.DrawImage(gameObject.Texture, gameObject.Position - new SKPoint(0, SizeY), paint);
+			if (gameObject.CompareTag("Player")){
+				if (gameObject.Position.X + gameObject.Texture.Width > SizeX && gameObject.Position.Y + gameObject.Texture.Height > SizeY){
+					canvas.DrawImage(gameObject.Texture, gameObject.Position - new SKPoint(SizeX, SizeY), paint);
+				}else if(gameObject.Position.X + gameObject.Texture.Width > SizeX){
+					canvas.DrawImage(gameObject.Texture, gameObject.Position - new SKPoint(SizeX, 0), paint);
+				}else if(gameObject.Position.Y + gameObject.Texture.Height > SizeY){
+					canvas.DrawImage(gameObject.Texture, gameObject.Position - new SKPoint(0, SizeY), paint);
+				}
 			}
-			
 		}
 	}
 
@@ -169,14 +176,47 @@ class Mygame
 		var bmap = new SKBitmap(info);
 		var oCanvas = new SKCanvas(bmap);
 		oCanvas.DrawCircle(new SKPoint(0, 0), 150/2, paint);
-		player = new GameObject(window.Size.X/2, window.Size.Y/2, SKImage.FromBitmap(bmap), "Player", false, "Player");
+		player = new GameObject(window.Size.X/2, window.Size.Y/2, SKImage.FromBitmap(bmap), "Player", true, "Player");
 		gameobjects.Add(player);
 
-		paint.Color = SKColors.Silver;
-		info = new SKImageInfo(150, 75);
+		info = new SKImageInfo(25, 25);
 		bmap = new SKBitmap(info);
 		oCanvas = new SKCanvas(bmap);
-		oCanvas.DrawRect(0, 0, 150, 75, paint);
-		gameobjects.Add(new GameObject(0, 500, SKImage.FromBitmap(bmap), "Rectangle"));
+		oCanvas.Clear(SKColors.OrangeRed);
+		meteorTexture = SKImage.FromBitmap(bmap);
+	}
+
+	private void createMeteor(){
+		
+		var posx = 0f;
+		var posy = 0f;
+		var velx = 0f;
+		var vely = 0f;
+		var rand = random.Next(100);
+		if(rand < 25){
+			posx = random.Next(SizeX);
+			posy = 0;
+			velx = random.Next(10, 200);
+			vely = -random.Next(100, 200);
+		}else if(rand < 50){
+			posx = random.Next(SizeX);
+			posy = SizeY;
+			velx = random.Next(100, 200);
+			vely = random.Next(100, 200);
+		}else if(rand < 75){
+			posx = 0;
+			posy = random.Next(SizeY);
+			velx = random.Next(100, 200);
+			vely = random.Next(100, 200);
+		}else{
+			posx = SizeX;
+			posy = random.Next(SizeY);
+			velx = -random.Next(100, 200);
+			vely = random.Next(100, 200);
+		}
+		Console.WriteLine(meteorTexture.Info.Size.Width);
+		var meteor = new GameObject(posx, posy, meteorTexture, $"Meteor{DateTime.Now.Ticks}", false, "Meteor");
+		meteor.AddVelocity(velx, vely);
+		gameobjects.Add(meteor);
 	}
 }

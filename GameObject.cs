@@ -16,11 +16,11 @@ class GameObject{
 	private SKImage texture;
 	private float velX;
 	private float velY;
-	private CircleCollider circleCollider;
 	private RectangleCollider rectangleCollider;
 	private string tag;
 	private string name;
 	public string Name{get{return name;}}
+	bool loosesVelocity;
 	public GameObject(){
 		positionX = 0;
 		positionY = 0;
@@ -32,52 +32,55 @@ class GameObject{
 		canvas.Clear(SKColors.Black);
 		canvas.Flush();
 		texture = SKImage.FromBitmap(bmap);
+		rectangleCollider = new RectangleCollider(Position, texture.Width, texture.Height);
 		tag = "";
 		this.name = "GameObject";
+		loosesVelocity = false;
 	}
 
-	public GameObject(float posx, float posy,SKImage texture, string name ,bool isCircle = false, string tag = ""){
+	public GameObject(float posx, float posy,SKImage texture, string name, bool loosesVelocity , string tag = ""){
 		positionX = posx;
 		positionY = posy;
+		this.loosesVelocity = loosesVelocity;
 		velX = 0;
 		velY = 0;
 		this.name = name;
 		this.tag = tag;
 		this.texture = texture;
-		if (isCircle){
-			circleCollider = Collider.getCollider(Position, (float)texture.Width /2f);
-		}else{
-			rectangleCollider = Collider.getCollider(Position, texture.Width, texture.Height);
-		}
+		rectangleCollider = new RectangleCollider(Position, texture.Width, texture.Height);
 	}
 
-	public void Move(double deltaTime, List<GameObject> gameObjects){
+	public bool Move(double deltaTime, List<GameObject> gameObjects){
 		if (velX < 1 && velX > -1) velX = 0;
 		if (velY < 1 && velY > -1) velY = 0;
-		if (velX == 0 && velY == 0){
-			return;
-		}
+		
 		positionX += (velX * ((float)deltaTime));
 		positionY -= (velY * ((float)deltaTime));
 
-		if (rectangleCollider != null) rectangleCollider.Origin = Position;
-		else circleCollider.Origin = Position;
-		var collidesWith = new List<GameObject>();
-		if (velY != 0 || velX != 0){
-			collidesWith = checkCollision(gameObjects);		
+		rectangleCollider.Origin = Position;
+
+		if (tag == "Player"){
+			if (checkCollision(gameObjects)); //[TODO]Trigger Game Over
 		}
 
+		if (loosesVelocity){
+			velX -= velX*((float)deltaTime) * drag;
+			velY -= velY*((float)deltaTime) * drag;
+		}
 
-		velX -= velX*((float)deltaTime) * drag;
-		velY -= velY*((float)deltaTime) * drag;
 		if(tag == "Player"){
 			if(positionX < 0) positionX = Mygame.SizeX - positionX;
 			else if(positionX > Mygame.SizeX) positionX = positionX - Mygame.SizeX;
 			if(positionY < 0) positionY = Mygame.SizeY - positionY;
 			else if(positionY > Mygame.SizeY) positionY = Mygame.SizeY - Mygame.SizeY;
 		}
+		else if (tag == "Meteor"){
+			if(positionX < -texture.Width || positionX  > Mygame.SizeX || positionY < - texture.Height || positionY  > Mygame.SizeY){
+				return true;
+			}
+		}
 
-
+		return false;
 	}
 
 	public void AddVelocity(float x, float y){
@@ -93,13 +96,12 @@ class GameObject{
 		return new SKRect(rectangleCollider.Origin.X, rectangleCollider.Origin.Y, rectangleCollider.Width + rectangleCollider.Origin.X, rectangleCollider.Height + rectangleCollider.Origin.Y);
 	}
 
-	private List<GameObject> checkCollision(List<GameObject> gameObjects){
-		List<GameObject> collidesWith = new List<GameObject>();
+	private bool checkCollision(List<GameObject> gameObjects){
 		foreach (GameObject gameObject in gameObjects){
 			if (gameObject == this) continue;
 			Console.WriteLine($"\n{gameObject.name}");
-			rectangleCollider.checkCollision(gameObject.rectangleCollider);
+			if (rectangleCollider.checkCollision(gameObject.rectangleCollider)) return true;
 			}
-			return collidesWith;
+			return false;
 	}
 }
