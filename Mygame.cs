@@ -22,6 +22,7 @@ class Mygame
 	private SKImage meteorTexture;
 	private double meteorTimer;
 	private int score;
+	private int difficulty;
 
 	public Mygame(int width, int height, string title){
 		var options = WindowOptions.Default;
@@ -62,6 +63,7 @@ class Mygame
 
 	private void OnLoad(){
 		currentLevel = 0;
+		difficulty = 0;
 		//create and bind input context
 		var input = window.CreateInput();
 
@@ -104,7 +106,7 @@ class Mygame
 
 
 		//load previous settings
-		userPreferences = new UserPreferences(true);
+		userPreferences = new UserPreferences();
 		userPreferences.Load();
 	}
 
@@ -121,6 +123,7 @@ class Mygame
 		if(pressedKeys.Contains(Key.Space)){
 			pressedKeys.Remove(Key.Space);
 			currentLevel = 0;
+			if (userPreferences.HighScore < score) userPreferences.HighScore = score;
 		}
 	}
 
@@ -139,11 +142,11 @@ class Mygame
 		
 		if(meteorTimer >= 0.8){
 			meteorTimer = 0;
-			createMeteor();
-			createMeteor();
-			createMeteor();
+			for (int i = 0; i < difficulty; i++) createMeteor();
 			score += 1;
+			if (score % 7 == 0) difficulty += 1;
 		}
+
 		meteorTimer += arg1;
 
 		if (pressedKeys.Contains(Key.A)){
@@ -190,6 +193,7 @@ class Mygame
 		if (pressedKeys.Contains(Key.Space)){
 			pressedKeys.Remove(Key.Space);
 			currentLevel = 1;
+			difficulty = 1;
 			createObjects();
 			meteorTimer = 0;
 			score = 0;
@@ -197,6 +201,9 @@ class Mygame
 	}
 
 	private void showMainMenuRender(){
+		paint.TextSize = 20;
+		canvas.DrawText($"Highscore: {score}", SizeX / 2 - paint.MeasureText($"Highscore: {score}") / 2, 100, paint);
+		
 		paint.TextSize = 36;
 		canvas.DrawText("Dodge Em All", SizeX / 2 - paint.MeasureText("Dodge Em All") / 2, SizeY / 2, paint);
 		
