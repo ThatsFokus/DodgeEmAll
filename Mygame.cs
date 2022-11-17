@@ -34,6 +34,7 @@ class Mygame
 		window.Update += OnUpdate;
 		window.Render += OnRender;
 		window.Load += OnLoad;
+		window.Closing += onClosing;
 	}
 
 	private void OnUpdate(double arg1){
@@ -284,5 +285,9 @@ class Mygame
 		var meteor = new GameObject(posx, posy, meteorTexture, "Meteor", false, "Meteor");
 		meteor.AddVelocity(velx, vely);
 		gameobjects.Add(meteor);
+	}
+
+	void onClosing(){
+		userPreferences.Save();
 	}
 }
