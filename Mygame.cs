@@ -203,7 +203,7 @@ class Mygame
 
 	private void showMainMenuRender(){
 		paint.TextSize = 20;
-		canvas.DrawText($"Highscore: {score}", SizeX / 2 - paint.MeasureText($"Highscore: {score}") / 2, 100, paint);
+		canvas.DrawText($"Highscore: {userPreferences.HighScore}", SizeX / 2 - paint.MeasureText($"Highscore: {userPreferences.HighScore}") / 2, 100, paint);
 		
 		paint.TextSize = 36;
 		canvas.DrawText("Dodge Em All", SizeX / 2 - paint.MeasureText("Dodge Em All") / 2, SizeY / 2, paint);
